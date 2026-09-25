@@ -576,18 +576,18 @@ async function seed() {
     throw new Error("No matches found or created in the database.");
   }
 
-  // NOTE: Score resets are disabled because score updates are not supported.
-  // const resetIds = new Set();
-  // for (const entry of matchMap.values()) {
-  //   const matchId = entry.match?.id;
-  //   if (!Number.isInteger(matchId) || resetIds.has(matchId)) {
-  //     continue;
-  //   }
-  //   resetIds.add(matchId);
-  //   entry.score.home = 0;
-  //   entry.score.away = 0;
-  //   await updateMatchScore(matchId, 0, 0);
-  // }
+  const resetIds = new Set();
+  for (const entry of matchMap.values()) {
+    const matchId = entry.match?.id;
+    if (!Number.isInteger(matchId) || resetIds.has(matchId)) {
+      continue;
+    }
+    resetIds.add(matchId);
+    entry.score.home = 0;
+    entry.score.away = 0;
+    await updateMatchScore(matchId, 0, 0);
+    console.log(`↩️  [Match ${matchId}] Score reset to 0-0`);
+  }
 
   const expandedFeed = expandFeedForMatches(feed, seedMatches);
   const randomizedFeed = buildRandomizedFeed(expandedFeed, matchMap);
