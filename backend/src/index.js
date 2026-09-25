@@ -11,11 +11,14 @@ import { commentaryRouter } from "./routes/commentary.js";
 
 const PORT = Number(process.env.PORT || 8000);
 const HOST = process.env.HOST || "0.0.0.0";
+const CORS_ORIGINS = (process.env.CORS_ORIGIN || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim());
 const app = express();
 const server = http.createServer(app);
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: CORS_ORIGINS,
   }),
 );
 app.use(express.json());
